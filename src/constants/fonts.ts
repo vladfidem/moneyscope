@@ -23,5 +23,3 @@ export const fonts = {
     buttonPrimary: { fontSize: 16, lineHeight: 24 },
   }
 }
-
-export type Fonts = typeof fonts

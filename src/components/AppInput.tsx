@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet, TouchableWithoutFeedback,
 } from 'react-native'
-import { useTheme } from '../store/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '../store'
 
 interface AppInputProps extends TextInputProps {
   label?: string

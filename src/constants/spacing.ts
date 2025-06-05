@@ -11,5 +11,3 @@ export const spacing = {
   size20: 20,
   size22: 22,
 }
-
-export type Spacing = typeof spacing

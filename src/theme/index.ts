@@ -1,7 +1,6 @@
 import { lightTheme } from './lightTheme'
 import { darkTheme } from './darkTheme'
-import { Spacing } from '../constants/spacing'
-import { Fonts } from '../constants/fonts'
+import { Spacing, Fonts } from '../constants'
 
 export { lightTheme, darkTheme }
 export type ThemeColors = typeof lightTheme

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '../store/ThemeContext'
+import { useTheme } from '../store'
 
 interface AppCheckboxProps {
   isChecked: boolean;

@@ -1,7 +1,6 @@
 import { useColorScheme } from 'react-native'
 import { darkTheme, lightTheme, Theme } from '../theme'
-import { spacing } from '../constants/spacing'
-import { fonts } from '../constants/fonts'
+import { spacing, fonts } from '../constants'
 
 export const useTheme = (): Theme => {
   const scheme = useColorScheme()

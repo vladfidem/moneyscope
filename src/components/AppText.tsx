@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Text, TextProps } from 'react-native'
-import { useTheme } from '../hooks/useTheme'
+import { useTheme } from '../hooks'
 
 type Variant =
   | 'h1'
