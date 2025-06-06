@@ -15,12 +15,7 @@ export const AppNavigator: FC = () => {
     (async () => {
       const hasLaunched = await AsyncStorage.getItem('hasLaunched')
 
-      if (hasLaunched === null) {
-        await AsyncStorage.setItem('hasLaunched', 'true')
-        setFirstLaunch(true)
-      } else {
-        setFirstLaunch(false)
-      }
+      hasLaunched === null ? setFirstLaunch(true) : setFirstLaunch(false)
     })()
   }, [])
 

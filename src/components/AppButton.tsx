@@ -78,7 +78,7 @@ export const AppButton: FC<AppButtonProps> = ({
       alignItems: 'center',
     },
     button: {
-      borderRadius: spacing.xl,
+      borderRadius: spacing.xxl,
       alignItems: 'center',
       justifyContent: 'center',
       opacity: disabled || isLoading ? 0.8 : 1,

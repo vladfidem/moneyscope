@@ -21,7 +21,7 @@ export const AppCheckbox: FC<AppCheckboxProps> = ({
       width: size,
       height: size,
       borderRadius: spacing.xs,
-      borderWidth: 2,
+      borderWidth: spacing.xxs,
       borderColor: `${colors.button.primary}1A`,
       backgroundColor: isChecked ? colors.button.primary : colors.background.secondary,
       justifyContent: 'center',

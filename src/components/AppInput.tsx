@@ -33,8 +33,8 @@ export const AppInput: React.FC<AppInputProps> = ({
     container: {
       borderRadius: spacing.size10,
       backgroundColor: colors.background.secondary,
-      paddingHorizontal: spacing.size20,
-      paddingVertical: spacing.size20,
+      paddingHorizontal: spacing.size10 * 2,
+      paddingVertical: spacing.size10 * 2,
       flexDirection: 'row',
       alignItems: 'center',
       height: spacing.size10 * 6
@@ -53,7 +53,7 @@ export const AppInput: React.FC<AppInputProps> = ({
       fontSize: fonts.sizes.inputFieldCaption.fontSize,
       marginBottom: spacing.sm,
     },
-    icon: { marginLeft: spacing.size20 },
+    icon: { marginLeft: spacing.size10 * 2 },
   })
 
   return (
@@ -75,7 +75,7 @@ export const AppInput: React.FC<AppInputProps> = ({
             style={styles.icon}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={spacing.size20} color={colors.system.primary}/>
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={spacing.size10 * 2} color={colors.system.primary}/>
           </TouchableOpacity>
         )}
       </View>
