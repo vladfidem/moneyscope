@@ -124,7 +124,7 @@ export const OnboardingScreen: FC<OnboardingScreenProps> = ({ navigation }) => {
 
   const handleFinishOnboarding = async () => {
     await AsyncStorage.setItem('hasLaunched', 'true')
-    navigation.replace(Routes.SignUp)
+    navigation.navigate(Routes.SignUp)
   }
 
   const scrollToNext = async () => {

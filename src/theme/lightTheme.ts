@@ -23,6 +23,7 @@ export const lightTheme = {
   },
   system: {
     success: '#009218',
+    error: '#D32F2F',
     primary: '#2C14DD',
     secondary: '#BBBBBB',
   },

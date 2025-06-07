@@ -98,7 +98,7 @@ export const AppButton: FC<AppButtonProps> = ({
       {...rest}
     >
       {isLoading ? (
-        <ActivityIndicator color={getButtonContentColor()}/>
+        <ActivityIndicator size={spacing.lg} color={getButtonContentColor()}/>
       ) : (
         <View style={styles.container}>
           {iconName && <Ionicons name={iconName} style={styles.iconStyle}/>}

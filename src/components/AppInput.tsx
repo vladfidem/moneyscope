@@ -9,10 +9,12 @@ import {
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '../store'
+import { AppText } from './AppText'
 
 interface AppInputProps extends TextInputProps {
   label?: string
   isPassword?: boolean
+  error?: string
 }
 
 export const AppInput: React.FC<AppInputProps> = ({
@@ -20,6 +22,7 @@ export const AppInput: React.FC<AppInputProps> = ({
   value,
   isPassword = false,
   style,
+  error,
   ...rest
 }) => {
   const { colors, fonts, spacing } = useTheme()
@@ -37,7 +40,9 @@ export const AppInput: React.FC<AppInputProps> = ({
       paddingVertical: spacing.size10 * 2,
       flexDirection: 'row',
       alignItems: 'center',
-      height: spacing.size10 * 6
+      height: spacing.size10 * 6,
+      borderWidth: error ? 1 : 0,
+      borderColor: error && colors.system.error
     },
     valueContainer: { flex: 1 },
     value: {
@@ -48,37 +53,53 @@ export const AppInput: React.FC<AppInputProps> = ({
       margin: 0,
     },
     label: {
-      color: colors.text.tertiary,
+      color: error ? colors.system.error : colors.text.tertiary,
       fontFamily: fonts.semibold,
       fontSize: fonts.sizes.inputFieldCaption.fontSize,
       marginBottom: spacing.sm,
     },
     icon: { marginLeft: spacing.size10 * 2 },
+    errorText: {
+      color: colors.system.error,
+      fontFamily: fonts.regular,
+      marginTop: spacing.xs,
+    },
   })
 
   return (
-    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
-      <View style={styles.container}>
-        <View style={styles.valueContainer}>
-          {showLabel && <Text style={styles.label}>{label}</Text>}
-          <TextInput
-            ref={inputRef}
-            secureTextEntry={secure}
-            placeholderTextColor={colors.text.tertiary}
-            style={styles.value} {...rest}
-          />
-        </View>
+    <View>
+      <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
+        <View style={styles.container}>
+          <View style={styles.valueContainer}>
+            {showLabel && <Text style={styles.label}>{label}</Text>}
+            <TextInput
+              ref={inputRef}
+              secureTextEntry={secure}
+              placeholderTextColor={colors.text.tertiary}
+              style={styles.value} {...rest}
+            />
+          </View>
 
-        {isPassword && (
-          <TouchableOpacity
-            onPress={() => setShowPassword(prev => !prev)}
-            style={styles.icon}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={spacing.size10 * 2} color={colors.system.primary}/>
-          </TouchableOpacity>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+          {isPassword && (
+            <TouchableOpacity
+              onPress={() => setShowPassword(prev => !prev)}
+              style={styles.icon}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={spacing.size10 * 2}
+                color={colors.system.primary}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+      {error && (
+        <AppText type="text" variant="caption" style={styles.errorText}>
+          {error}
+        </AppText>
+      )}
+    </View>
   )
 }

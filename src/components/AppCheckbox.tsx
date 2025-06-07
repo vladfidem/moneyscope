@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { TouchableOpacity, StyleSheet, TouchableWithoutFeedbackProps } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '../store'
 
-interface AppCheckboxProps {
+interface AppCheckboxProps extends TouchableWithoutFeedbackProps{
   isChecked: boolean;
   onToggle: () => void;
   size?: number;
@@ -13,6 +13,7 @@ export const AppCheckbox: FC<AppCheckboxProps> = ({
   isChecked,
   onToggle,
   size = 24,
+  style,
 }) => {
   const { colors, spacing } = useTheme()
 
@@ -21,7 +22,7 @@ export const AppCheckbox: FC<AppCheckboxProps> = ({
       width: size,
       height: size,
       borderRadius: spacing.xs,
-      borderWidth: spacing.xxs,
+      borderWidth: spacing.size1,
       borderColor: `${colors.button.primary}1A`,
       backgroundColor: isChecked ? colors.button.primary : colors.background.secondary,
       justifyContent: 'center',
@@ -33,7 +34,7 @@ export const AppCheckbox: FC<AppCheckboxProps> = ({
   })
 
   return (
-    <TouchableOpacity onPress={onToggle} style={styles.checkboxContainer}>
+    <TouchableOpacity onPress={onToggle} style={[style, styles.checkboxContainer]}>
       {isChecked && (
         <Ionicons
           name="checkmark"

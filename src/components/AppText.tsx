@@ -28,7 +28,7 @@ interface AppTextProps extends TextProps {
 export const AppText: FC<AppTextProps> = ({
   type = 'text',
   variant = 'body',
-  weight = 'regular',
+  weight = 'medium',
   color = 'primary',
   style,
   ...rest
@@ -48,5 +48,5 @@ export const AppText: FC<AppTextProps> = ({
     letterSpacing: 0,
   }
 
-  return <Text style={[textStyle, style]} {...rest}/>
+  return <Text suppressHighlighting={!!rest.onPress} style={[textStyle, style]} {...rest}/>
 }

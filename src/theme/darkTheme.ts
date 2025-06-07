@@ -1,6 +1,7 @@
 import { ThemeColors } from './index'
 
 export const darkTheme: ThemeColors = {
+  black: '#000000',
   text: {
     primary: '#FFFFFF',
     secondary: '#BFB4D5',
@@ -24,6 +25,7 @@ export const darkTheme: ThemeColors = {
   },
   system: {
     success: '#60C771',
+    error: '#EF6A6A',
     primary: '#FFFFFF',
     secondary: '#503F74',
   },
