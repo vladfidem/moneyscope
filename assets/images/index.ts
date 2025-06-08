@@ -1,3 +1,5 @@
-const OnboardingImage = require('../../assets/images/onboarding_illustration.png')
+const OnboardingImage = require('./onboarding-illustration.png')
+const KudaBankLightImage = require('./kuda-bank-light.png')
+const KudaBankDarkImage = require('./kuda-bank-dark.png')
 
-export { OnboardingImage }
+export { OnboardingImage, KudaBankLightImage, KudaBankDarkImage }
