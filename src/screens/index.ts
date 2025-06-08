@@ -1,3 +1,3 @@
-export { OnboardingScreen } from './OnboardingScreen'
-export { SignUpScreen } from './SignUpScreen'
-export { MyAccountScreen } from './MyAccountScreen'
+export * from './OnboardingScreen'
+export * from './SignUpScreen'
+export * from './MyAccountScreen'

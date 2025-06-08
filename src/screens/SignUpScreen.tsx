@@ -1,12 +1,13 @@
 import { FC, useState } from 'react'
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet, Alert, Linking } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet, Linking } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Ionicons } from '@expo/vector-icons'
 import { AppButton, AppCheckbox, AppInput, AppText } from '../components'
-import { signUpSchema, SignUpFormDataType } from '../utils/authValidationSchema'
-import { useTheme } from '../store'
+import { signUpSchema, SignUpFormDataType } from '../utils'
+import { useAuth, useTheme } from '../store'
+import { signUpService } from '../services'
 
 interface SignUpScreenProps {
   navigation: any
@@ -14,9 +15,10 @@ interface SignUpScreenProps {
 
 export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
   const { colors, spacing } = useTheme()
+  const { login } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
-  const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormDataType>({
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignUpFormDataType>({
     resolver: yupResolver(signUpSchema),
     defaultValues: { name: '', email: '', password: '', acceptTerms: false }
   })
@@ -87,24 +89,22 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 
   const handleGoLink = () => Linking.openURL('https://example.com/')
 
-  const handleSignUp = async (data: any) => {
+  const handleSignUp = handleSubmit(async (data) => {
     try {
       setIsLoading(true)
-      setTimeout(() => {
-        let message = ''
+      setError('root', { message: '' })
+      const response = await signUpService(data)
 
-        for (let key in data) {
-          message += `${key}: ${data[key]}\n`
-        }
-
-        Alert.alert('Account created', message)
-      }, 2000)
-    } catch (error) {
-      console.log('sign up error', error)
+      await login(response.basicAuthCredentials)
+    } catch (error: any) {
+      setError('root', {
+        type: 'manual',
+        message: error.message || 'Something went wrong. Please try again.',
+      })
     } finally {
-      setTimeout(() => setIsLoading(false), 2000)
+      setIsLoading(false)
     }
-  }
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -199,7 +199,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             />
           </View>
 
-          {(errors.acceptTerms || errors.root) && (
+          {(errors.acceptTerms || errors.root?.message) && (
             <View style={styles.errorMessageContainer}>
               <Ionicons name="alert-circle-outline" size={spacing.lg} color={colors.system.error}/>
               <AppText type="text" variant="bodySmall" style={styles.errorMessage}>
@@ -219,7 +219,8 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
             <AppButton
               title="Create account"
               isLoading={isLoading}
-              onPress={handleSubmit(handleSignUp)}
+              disabled={Object.keys(errors).filter(key => key !== 'root').length > 0}
+              onPress={handleSignUp}
             />
           </View>
         </ScrollView>
