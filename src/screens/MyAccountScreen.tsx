@@ -9,7 +9,7 @@ import { AccountData } from '../types'
 
 export const MyAccountScreen: FC = () => {
   const { spacing, colors, isDark } = useTheme()
-  const { userData } = useAuth()
+  const { userAuthData, logout } = useAuth()
   const [accountData, setAccountData] = useState<AccountData>()
   const [refreshing, setRefreshing] = useState(false)
 
@@ -83,16 +83,6 @@ export const MyAccountScreen: FC = () => {
     },
   })
 
-  const fetchAccountData = useCallback(async () => {
-    try {
-      setAccountData(await accountService(userData!))
-    } catch (error: any) {
-      console.error('Failed to fetch account data:', error)
-    } finally {
-      setRefreshing(false)
-    }
-  }, [])
-
   const formatCurrency = useCallback((amount: number, currency: string, isTransaction: boolean = false) => {
     const sign = amount < 0 ? '-' : isTransaction ? '+' : ''
     const formattedAmount = Math.abs(amount).toLocaleString('en-US')
@@ -100,7 +90,7 @@ export const MyAccountScreen: FC = () => {
     return `${sign}${currency}${formattedAmount}`
   }, [])
 
-  const renderAccountInfoRow = (title: string, description: string) => (
+  const renderAccountInfoRow = useCallback((title: string, description: string) => (
     <View style={styles.accountInfoContainer}>
       <AppText type="text" variant="bodySmall" color="secondary">{title}</AppText>
       <AppText
@@ -111,16 +101,27 @@ export const MyAccountScreen: FC = () => {
         {description}
       </AppText>
     </View>
-  )
+  ), [])
 
-  useEffect(() => {
-    (async () => await fetchAccountData())()
-  }, [fetchAccountData])
+  const fetchAccountData = useCallback(async () => {
+    try {
+      userAuthData && setAccountData(await accountService.getAccountData(userAuthData))
+    } catch (error: any) {
+      console.error('Failed to fetch account data:', error)
+      await logout()
+    } finally {
+      setRefreshing(false)
+    }
+  }, [userAuthData, logout])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true)
     await fetchAccountData()
-  }, [])
+  }, [fetchAccountData])
+
+  useEffect(() => {
+    (async () => await fetchAccountData())()
+  }, [fetchAccountData])
 
   if (!accountData) return <AppLoader/>
 

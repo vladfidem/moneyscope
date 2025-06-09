@@ -3,7 +3,7 @@ export interface AuthCredentials {
   password: string
 }
 
-export interface SignUpResponseData {
+export interface AuthResponseData {
   message: string
   nextStep: string
   basicAuthCredentials: AuthCredentials

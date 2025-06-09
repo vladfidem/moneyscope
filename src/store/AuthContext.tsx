@@ -4,54 +4,54 @@ import { AuthCredentials } from '../types'
 
 interface AuthContextProps {
   isLoggedIn: boolean
-  userData: AuthCredentials | null
+  userAuthData: AuthCredentials | null
   login: (data: AuthCredentials) => Promise<void>
   logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
-  userData: null,
+  userAuthData: null,
   login: async () => {},
   logout: async () => {},
 })
 
-const USER_DATA_STORAGE_KEY = 'userData'
+const USER_AUTH_DATA_STORAGE_KEY = 'userAuthData'
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userData, setUserData] = useState<AuthCredentials | null>(null)
+  const [userAuthData, setUserAuthData] = useState<AuthCredentials | null>(null)
 
   useEffect(() => {
     (async () => {
-      const storedUserData = await AsyncStorage.getItem(USER_DATA_STORAGE_KEY)
+      const storedUserAuthData = await AsyncStorage.getItem(USER_AUTH_DATA_STORAGE_KEY)
 
-      if (storedUserData) {
-        const parsedUserData = JSON.parse(storedUserData)
+      if (storedUserAuthData) {
+        const parsedUserAuthData = JSON.parse(storedUserAuthData)
 
-        setUserData(parsedUserData)
+        setUserAuthData(parsedUserAuthData)
         setIsLoggedIn(true)
       } else {
-        setUserData(null)
+        setUserAuthData(null)
         setIsLoggedIn(false)
       }
     })()
   }, [])
 
   const login = async (data: AuthCredentials) => {
-    await AsyncStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(data))
-    setUserData(data)
+    await AsyncStorage.setItem(USER_AUTH_DATA_STORAGE_KEY, JSON.stringify(data))
+    setUserAuthData(data)
     setIsLoggedIn(true)
   }
 
   const logout = async () => {
-    await AsyncStorage.removeItem(USER_DATA_STORAGE_KEY)
-    setUserData(null)
+    await AsyncStorage.removeItem(USER_AUTH_DATA_STORAGE_KEY)
+    setUserAuthData(null)
     setIsLoggedIn(false)
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userData, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userAuthData, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

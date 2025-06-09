@@ -1,11 +1,11 @@
 import { FC, useRef, useState } from 'react'
 import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { OnboardingImage } from '../../assets/images'
 import { AppText, AppButton } from '../components'
 import { useTheme } from '../store'
 import { Routes } from '../types'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface OnboardingScreenProps {
   navigation: any

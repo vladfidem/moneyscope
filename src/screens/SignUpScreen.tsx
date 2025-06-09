@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { AppButton, AppCheckbox, AppInput, AppText } from '../components'
 import { signUpSchema, SignUpFormDataType } from '../utils'
 import { useAuth, useTheme } from '../store'
-import { signUpService } from '../services'
+import { authService } from '../services'
 
 interface SignUpScreenProps {
   navigation: any
@@ -93,7 +93,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
     try {
       setIsLoading(true)
       setError('root', { message: '' })
-      const response = await signUpService(data)
+      const response = await authService.signUp(data)
 
       await login(response.basicAuthCredentials)
     } catch (error: any) {
@@ -182,6 +182,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
                     isChecked={value}
                     onToggle={() => onChange(!value)}
                     style={styles.checkbox}
+                    isError={!!errors.acceptTerms}
                   />
                   <AppText type="text" variant="bodySmall">
                     By signing up, you agree to the{' '}
