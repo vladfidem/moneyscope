@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import { Image, ScrollView, View, StyleSheet, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { KudaBankLightImage, KudaBankDarkImage } from '../../assets/images'
-import { AppButton, AppLoader, AppText } from '../components'
+import { AppButton, AppErrorMessage, AppLoader, AppText } from '../components'
 import { useAuth, useTheme } from '../store'
 import { accountService } from '../services'
 import { AccountData } from '../types'
@@ -12,6 +12,7 @@ export const MyAccountScreen: FC = () => {
   const { userAuthData, logout } = useAuth()
   const [accountData, setAccountData] = useState<AccountData>()
   const [refreshing, setRefreshing] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const styles = StyleSheet.create({
     container: {
@@ -83,14 +84,14 @@ export const MyAccountScreen: FC = () => {
     },
   })
 
-  const formatCurrency = useCallback((amount: number, currency: string, isTransaction: boolean = false) => {
+  const formatCurrency = (amount: number, currency: string, isTransaction: boolean = false) => {
     const sign = amount < 0 ? '-' : isTransaction ? '+' : ''
     const formattedAmount = Math.abs(amount).toLocaleString('en-US')
 
     return `${sign}${currency}${formattedAmount}`
-  }, [])
+  }
 
-  const renderAccountInfoRow = useCallback((title: string, description: string) => (
+  const renderAccountInfoRow = (title: string, description: string) => (
     <View style={styles.accountInfoContainer}>
       <AppText type="text" variant="bodySmall" color="secondary">{title}</AppText>
       <AppText
@@ -101,14 +102,22 @@ export const MyAccountScreen: FC = () => {
         {description}
       </AppText>
     </View>
-  ), [])
+  )
 
   const fetchAccountData = useCallback(async () => {
     try {
-      userAuthData && setAccountData(await accountService.getAccountData(userAuthData))
+      if (userAuthData) {
+        const response = await accountService.getAccountData(userAuthData)
+
+        if (response) {
+          setErrorMessage('')
+          setAccountData(response)
+        }
+      } else {
+        await logout()
+      }
     } catch (error: any) {
-      console.error('Failed to fetch account data:', error)
-      await logout()
+      setErrorMessage(error.message)
     } finally {
       setRefreshing(false)
     }
@@ -141,6 +150,8 @@ export const MyAccountScreen: FC = () => {
           <Image source={isDark ? KudaBankDarkImage : KudaBankLightImage} style={styles.bankLogo}/>
           <AppText type="text" variant="captionBig" weight="semibold">Kuda Bank</AppText>
         </View>
+
+        {errorMessage && <AppErrorMessage message={errorMessage}/>}
 
         <View style={styles.card}>
           {renderAccountInfoRow('Type of account', 'Saving')}

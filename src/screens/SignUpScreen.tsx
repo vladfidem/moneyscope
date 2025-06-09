@@ -3,8 +3,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet, Linking }
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Ionicons } from '@expo/vector-icons'
-import { AppButton, AppCheckbox, AppInput, AppText } from '../components'
+import { AppButton, AppCheckbox, AppErrorMessage, AppInput, AppText } from '../components'
 import { signUpSchema, SignUpFormDataType } from '../utils'
 import { useAuth, useTheme } from '../store'
 import { authService } from '../services'
@@ -67,23 +66,6 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
     },
     createAccountButtonContainer: {
       paddingVertical: spacing.md,
-    },
-    errorMessageContainer: {
-      marginHorizontal: spacing.xs,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: colors.system.error,
-      borderRadius: spacing.size10,
-      padding: spacing.sm,
-      backgroundColor: colors.background.secondary
-    },
-    errorMessage: {
-      marginLeft: spacing.sm,
-      color: colors.system.error,
-      textAlign: 'center',
-      flexShrink: 1,
     },
   })
 
@@ -201,12 +183,7 @@ export const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
           </View>
 
           {(errors.acceptTerms || errors.root?.message) && (
-            <View style={styles.errorMessageContainer}>
-              <Ionicons name="alert-circle-outline" size={spacing.lg} color={colors.system.error}/>
-              <AppText type="text" variant="bodySmall" style={styles.errorMessage}>
-                {errors.acceptTerms?.message || errors.root?.message}
-              </AppText>
-            </View>
+            <AppErrorMessage>{errors.acceptTerms?.message || errors.root?.message}</AppErrorMessage>
           )}
 
           <View style={styles.alreadyHaveAccountTextContainer}>

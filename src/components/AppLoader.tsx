@@ -6,7 +6,7 @@ export const AppLoader: FC = () => {
   const { colors } = useTheme()
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background.primary }]}>
       <ActivityIndicator size="large" color={colors.system.primary} />
     </View>
   )

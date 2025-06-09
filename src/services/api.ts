@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import axiosRetry from 'axios-retry'
 
 const API_BASE_URL = 'https://artjoms-spole.fly.dev'
 
@@ -7,6 +8,15 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   }
+})
+
+axiosRetry(api, {
+  retries: 5,
+  retryDelay: retryCount => axiosRetry.exponentialDelay(retryCount),
+  retryCondition: (error: AxiosError) => axiosRetry.isNetworkError(error),
+  onRetry: (retryCount, error, requestConfig) => {
+    console.warn(`Retry attempt ${retryCount} for ${requestConfig.url}. Error: ${error.message}`);
+  },
 })
 
 api.interceptors.response.use(
