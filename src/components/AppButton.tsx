@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '../hooks'
+import { useTheme } from '../store'
 
 interface AppButtonProps extends TouchableOpacityProps {
   title?: string;
